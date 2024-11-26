@@ -10,11 +10,12 @@ const config = require('../config/database');
 describe('Reservation Controller', () => {
   beforeAll(async () => {
     await mongoose.connect(config.database);
-  });
-
+  }, 30000); // 30 seconds timeout
+  
   afterAll(async () => {
     await mongoose.connection.close();
-  });
+  }, 30000); // 30 seconds timeout
+  
 
   beforeEach(async () => {
     await User.deleteMany({});

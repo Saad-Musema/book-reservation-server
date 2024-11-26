@@ -7,13 +7,14 @@ const Book = require('../models/Book');
 const config = require('../config/database');
 
 describe('Book Controller', () => {
-  beforeAll(async () => {
-    await mongoose.connect(config.database);
-  });
-
-  afterAll(async () => {
-    await mongoose.connection.close();
-  });
+    beforeAll(async () => {
+        await mongoose.connect(config.database);
+      }, 30000); // 30 seconds timeout
+      
+      afterAll(async () => {
+        await mongoose.connection.close();
+      }, 30000); // 30 seconds timeout
+      
 
   it('should get all books', async () => {
     const req = {};
