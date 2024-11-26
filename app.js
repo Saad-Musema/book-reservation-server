@@ -19,7 +19,7 @@ app.use(express.json());
 
 // Connect to MongoDB
 mongoose
-  .connect(config.database, { useNewUrlParser: true, useUnifiedTopology: true })
+  .connect(config.database)
   .then(() => console.log("Connected to MongoDB"))
   .catch((err) => console.error("Could not connect to MongoDB", err));
 
