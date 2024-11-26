@@ -1,19 +1,23 @@
 /* eslint-disable no-undef */
+const { MongoMemoryServer } = require('mongodb-memory-server');
 const mongoose = require('mongoose');
 const { describe, it, expect, beforeAll, afterAll, beforeEach, afterEach } = require('@jest/globals');
 const { createReservation } = require('../controllers/reservationController');
 const User = require('../models/User');
 const Book = require('../models/Book');
 const Reservation = require('../models/Reservation');
-const config = require('../config/database');
 
 describe('Reservation Controller', () => {
+  let mongoServer;
   beforeAll(async () => {
-    await mongoose.connect(config.database);
+      mongoServer = await MongoMemoryServer.create();
+      const uri = mongoServer.getUri();
+      await mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
   });
-
+  
   afterAll(async () => {
-    await mongoose.connection.close();
+      await mongoose.disconnect();
+      await mongoServer.stop();
   });
 
   beforeEach(async () => {

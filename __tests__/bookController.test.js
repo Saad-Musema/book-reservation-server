@@ -1,20 +1,22 @@
 /* eslint-disable no-undef */
+const { MongoMemoryServer } = require('mongodb-memory-server');
 const mongoose = require('mongoose');
-// const jest = require('jest-mock');
 const { describe, it, expect, beforeAll, afterAll } = require('@jest/globals');
 const { getBooks, getBook, addBook, updateBook } = require('../controllers/bookController');
 const Book = require('../models/Book');
-const config = require('../config/database');
 
 describe('Book Controller', () => {
-  beforeAll(async () => {
-    await mongoose.connect(config.database);
-  });
-
-  afterAll(async () => {
-    await mongoose.connection.close();
-  });
-
+    let mongoServer;
+    beforeAll(async () => {
+        mongoServer = await MongoMemoryServer.create();
+        const uri = mongoServer.getUri();
+        await mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+    });
+    
+    afterAll(async () => {
+        await mongoose.disconnect();
+        await mongoServer.stop();
+    });
   it('should get all books', async () => {
     const req = {};
     const res = {
